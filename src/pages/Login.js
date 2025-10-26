@@ -1,96 +1,99 @@
-// src/pages/Login.js
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 
 export default function Login() {
-  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleLogin = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    
-    // Simple validation
     if (!email || !password) {
       setError('Please enter both email and password');
       return;
     }
-
-    // Store user in localStorage (simple session)
-    const user = {
-      id: '1',
-      email: email,
-      full_name: email.split('@')[0],
-      role: 'student',
-      points: 50,
-      created_date: new Date().toISOString()
-    };
-
-    localStorage.setItem('user', JSON.stringify(user));
-    navigate('/');
+    // Save fake user for session/demo
+    localStorage.setItem(
+      'user',
+      JSON.stringify({
+        id: '1',
+        email,
+        full_name: email.split('@')[0] || 'Campus User',
+        role: 'student',
+        points: 50,
+        created_date: new Date().toISOString()
+      })
+    );
+    // Reload - always works in any router/tunnel
+    window.location.href = '/';
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-xl">
-        <CardHeader className="text-center space-y-2">
-          <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <span className="text-white font-bold text-2xl">CC</span>
+    <div style={{
+      minHeight: "100vh", display: "flex", alignItems: "center",
+      justifyContent: "center", background: "linear-gradient(135deg, #f8fafc, #dbeafe)"
+    }}>
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          background: '#fff', padding: 32, borderRadius: 16,
+          boxShadow: '0 4px 24px #0001', minWidth: 350, maxWidth: 400
+        }}
+      >
+        <div style={{ textAlign: "center", marginBottom: 18 }}>
+          <div style={{
+            width: 54, height: 54, background: "linear-gradient(to right,#2563eb,#6366f1)",
+            borderRadius: 16, margin: "0 auto 12px auto", display: "flex", alignItems: "center", justifyContent: "center"
+          }}>
+            <span style={{ color: "#fff", fontSize: 24, fontWeight: 700 }}>CC</span>
           </div>
-          <CardTitle className="text-3xl font-bold">Campus Connect</CardTitle>
-          <p className="text-slate-600">Lost & Found Hub</p>
-        </CardHeader>
-        
-        <CardContent>
-          <form onSubmit={handleLogin} className="space-y-4">
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
-                {error}
-              </div>
-            )}
-
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="your.email@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="rounded-xl"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="rounded-xl"
-              />
-            </div>
-
-            <Button
-              type="submit"
-              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-3 rounded-xl text-lg"
-            >
-              Sign In
-            </Button>
-
-            <p className="text-center text-sm text-slate-500 mt-4">
-              For demo: Use any email and password
-            </p>
-          </form>
-        </CardContent>
-      </Card>
+          <h1 style={{ fontWeight: 700, fontSize: 28 }}>Campus Connect</h1>
+          <div style={{ color: "#64748b", fontSize: 16 }}>Lost & Found Hub</div>
+        </div>
+        {error && (
+          <div style={{
+            background: "#fee2e2", color: "#b91c1c", padding: 10,
+            borderRadius: 8, marginBottom: 16, textAlign: "center"
+          }}>{error}</div>
+        )}
+        <label style={{ fontWeight: 600, color: "#334155", display: "block", marginBottom: 6 }}>
+          Email
+          <input
+            type="email"
+            value={email}
+            autoFocus
+            style={{ width: "100%", padding: 10, borderRadius: 8, marginTop: 6, border: "1px solid #cbd5e1", marginBottom: 16 }}
+            onChange={e => setEmail(e.target.value)}
+          />
+        </label>
+        <label style={{ fontWeight: 600, color: "#334155", display: "block", marginBottom: 20 }}>
+          Password
+          <input
+            type="password"
+            value={password}
+            style={{ width: "100%", padding: 10, borderRadius: 8, marginTop: 6, border: "1px solid #cbd5e1" }}
+            onChange={e => setPassword(e.target.value)}
+          />
+        </label>
+        <button
+          type="submit"
+          style={{
+            width: "100%",
+            padding: 12,
+            background: "linear-gradient(90deg, #2563eb, #6366f1)",
+            color: "#fff",
+            fontWeight: 600,
+            fontSize: 18,
+            border: "none",
+            borderRadius: 8,
+            boxShadow: "0 1px 6px #1e293b22"
+          }}
+        >
+          Sign In
+        </button>
+        <div style={{ color: "#9ca3af", marginTop: 16, textAlign: "center", fontSize: 13 }}>
+          Demo: Use any email and password
+        </div>
+      </form>
     </div>
   );
 }

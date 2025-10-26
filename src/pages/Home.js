@@ -1,187 +1,160 @@
-// src/pages/Home.js
-import React, { useState, useEffect } from "react";
-import { LostItem } from "@/entities/LostItem";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Search, Filter, RefreshCw } from "lucide-react";
-import ItemCard from "../components/items/ItemCard";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { FiPlusCircle, FiCheckCircle, FiSearch, FiCamera, FiUsers, FiThumbsUp, FiFileText, FiClock, FiShield } from "react-icons/fi";
 
 export default function Home() {
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedStatus, setSelectedStatus] = useState("all");
+  const username = "Kushal Smarty";
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    loadItems();
-  }, []);
+  const stats = [
+    { icon: <FiUsers size={22} />, label: "Total Items", value: 0 },
+    { icon: <FiClock size={22} />, label: "This Week", value: 0 },
+    { icon: <FiFileText size={22} />, label: "Your Reports", value: 0 },
+    { icon: <FiThumbsUp size={22} />, label: "Successful Matches", value: 0 },
+  ];
 
-  const loadItems = async () => {
-    setLoading(true);
-    try {
-      const data = await LostItem.list("-created_date");
-      setItems(data);
-    } catch (error) {
-      console.error("Failed to load items:", error);
+  const features = [
+    {
+      icon: <FiCamera size={30} color="#2563eb" />,
+      title: "Instant QR Scanning",
+      desc: "Scan QR codes on found items for instant identification and owner contact",
+      color: "#e0f2fe"
+    },
+    {
+      icon: <FiCheckCircle size={30} color="#16a34a" />,
+      title: "Real-time Matching",
+      desc: "Get notified instantly when someone reports finding your lost item",
+      color: "#dcfce7"
+    },
+    {
+      icon: <FiShield size={30} color="#a21caf" />,
+      title: "Easy Claims",
+      desc: "Simple verification process to claim your items securely",
+      color: "#f3e8ff"
     }
-    setLoading(false);
-  };
-
-  const filteredItems = items.filter((item) => {
-    const matchesSearch =
-      item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.location_found.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      selectedCategory === "all" || item.category === selectedCategory;
-    const matchesStatus =
-      selectedStatus === "all" || item.status === selectedStatus;
-
-    return matchesSearch && matchesCategory && matchesStatus;
-  });
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 md:p-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">
-            Welcome to the Lost & Found Hub
-          </h1>
-          <p className="text-slate-600 text-lg">
-            A central place to find lost items or post items you've found.
-          </p>
-        </div>
-
-        {/* Search and Filters */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 mb-8 border border-slate-200/60 shadow-lg">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
-              <Input
-                placeholder="Search for items, descriptions, or locations..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 rounded-xl border-slate-200 bg-slate-50/50 py-3"
-              />
-            </div>
-
-            <div className="flex gap-3">
-              <Select
-                value={selectedCategory}
-                onValueChange={setSelectedCategory}
-              >
-                <SelectTrigger className="w-40 rounded-xl border-slate-200 bg-slate-50/50">
-                  <SelectValue placeholder="Category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Categories</SelectItem>
-                  <SelectItem value="electronics">Electronics</SelectItem>
-                  <SelectItem value="clothing">Clothing</SelectItem>
-                  <SelectItem value="accessories">Accessories</SelectItem>
-                  <SelectItem value="books">Books</SelectItem>
-                  <SelectItem value="keys">Keys</SelectItem>
-                  <SelectItem value="cards">Cards</SelectItem>
-                  <SelectItem value="wallet">Wallet</SelectItem>
-                  <SelectItem value="bags">Bags</SelectItem>
-                  <SelectItem value="waterbottle">Water Bottle</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-                <SelectTrigger className="w-36 rounded-xl border-slate-200 bg-slate-50/50">
-                  <SelectValue placeholder="Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Status</SelectItem>
-                  <SelectItem value="available">Available</SelectItem>
-                  <SelectItem value="claimed">Claimed</SelectItem>
-                  <SelectItem value="returned">Returned</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Button
-                onClick={loadItems}
-                variant="outline"
-                size="icon"
-                className="rounded-xl border-slate-200 hover:bg-slate-50"
-              >
-                <RefreshCw className="w-4 h-4" />
-              </Button>
-            </div>
+    <div style={{ background: "#f8fafc", minHeight: "100vh", padding: 32 }}>
+      <div style={{
+        background: "#fff",
+        borderRadius: 16,
+        boxShadow: "0 4px 32px #1e293b12",
+        padding: 32,
+        maxWidth: 1100,
+        marginLeft: "auto",
+        marginRight: "auto"
+      }}>
+        <div style={{ textAlign: "center" }}>
+          <h1 style={{ fontSize: 34, fontWeight: 800, marginBottom: 4 }}>SREC Found IT</h1>
+          <div style={{ color: "#64748b", letterSpacing: 1, fontWeight: 500, marginBottom: 16 }}>
+            Connect with your college community to reunite lost items with their owners.<br />
+            <span style={{ color: "#2563eb", fontWeight: 700 }}>Powered by QR technology.</span>
           </div>
         </div>
-
-        {/* Results */}
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {Array(8)
-              .fill(0)
-              .map((_, i) => (
-                <div
-                  key={i}
-                  className="bg-white rounded-2xl p-4 animate-pulse"
-                >
-                  <div className="aspect-[4/3] bg-slate-200 rounded-xl mb-4"></div>
-                  <div className="space-y-3">
-                    <div className="h-4 bg-slate-200 rounded w-3/4"></div>
-                    <div className="h-3 bg-slate-200 rounded w-full"></div>
-                    <div className="h-3 bg-slate-200 rounded w-1/2"></div>
-                  </div>
-                </div>
-              ))}
-          </div>
-        ) : (
-          <>
-            <div className="flex justify-between items-center mb-6">
-              <p className="text-slate-600 font-medium">
-                {filteredItems.length}{" "}
-                {filteredItems.length === 1 ? "item" : "items"} found
-              </p>
+        <div style={{
+          background: "#e0e7ff", borderRadius: 12, display: "inline-block", padding: "12px 28px",
+          margin: "16px auto 36px", fontWeight: 600, color: "#3730a3"
+        }}>
+          <span style={{
+            background: "#6366f1", color: "#fff", fontWeight: 700, padding: "7px 13px",
+            borderRadius: "50%", marginRight: 14
+          }}>K</span>
+          Welcome back, {username}!
+        </div>
+        <div style={{
+          display: "flex", gap: 28, justifyContent: "space-between", marginTop: 10, marginBottom: 44, flexWrap: "wrap"
+        }}>
+          <ActionCard
+            title="Report Lost Item"
+            desc="Lost something? Let us help you find it"
+            icon={<FiPlusCircle size={40} color="#ea580c" />}
+            color="#fee2e2"
+            onClick={() => navigate('/lost')}
+          />
+          <ActionCard
+            title="Report Found Item"
+            desc="Found something? Help return it to owner"
+            icon={<FiCheckCircle size={40} color="#17a34a" />}
+            color="#dcfce7"
+            onClick={() => navigate('/found')}
+          />
+          <ActionCard
+            title="Scan QR Code"
+            desc="Scan item QR code for instant details"
+            icon={<FiCamera size={40} color="#a21caf" />}
+            color="#f3e8ff"
+            onClick={() => alert('This is a demo QR code scanner popup!')}
+          />
+          <ActionCard
+            title="Browse Items"
+            desc="Search all lost & found items"
+            icon={<FiSearch size={40} color="#3b82f6" />}
+            color="#dbeafe"
+            onClick={() => navigate('/browse')}
+          />
+        </div>
+        <div style={{ display: "flex", gap: 30, justifyContent: "center", marginTop: 16, marginBottom: 40, flexWrap: "wrap" }}>
+          {stats.map(({ icon, label, value }, i) =>
+            <div key={label} style={{
+              padding: "20px 38px",
+              borderRadius: 12,
+              background: "#f1f5f9",
+              textAlign: "center",
+              minWidth: 150
+            }}>
+              <div style={{ marginBottom: 6 }}>{icon}</div>
+              <div style={{ fontWeight: 900, fontSize: 21 }}>{value}</div>
+              <div style={{ color: "#64748b", fontSize: 14, fontWeight: 500 }}>{label}</div>
             </div>
-
-            {filteredItems.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {filteredItems.map((item) => (
-                  <ItemCard key={item.id} item={item} />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-16">
-                <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Search className="w-12 h-12 text-slate-400" />
-                </div>
-                <h3 className="text-xl font-semibold text-slate-900 mb-2">
-                  No items found
-                </h3>
-                <p className="text-slate-600 mb-6">
-                  Try adjusting your search terms or filters
-                </p>
-                <Button
-                  onClick={() => {
-                    setSearchTerm("");
-                    setSelectedCategory("all");
-                    setSelectedStatus("all");
-                  }}
-                  variant="outline"
-                  className="rounded-xl"
-                >
-                  Clear Filters
-                </Button>
-              </div>
-            )}
-          </>
-        )}
+          )}
+        </div>
+        <div style={{ display: "flex", gap: 25, justifyContent: "center", marginTop: 30, flexWrap: "wrap" }}>
+          {features.map((f, i) =>
+            <div key={i} style={{
+              background: f.color,
+              borderRadius: 13,
+              flex: 1,
+              minWidth: 250,
+              maxWidth: 340,
+              padding: 28,
+              margin: "0 6px",
+              display: "flex", flexDirection: "column", alignItems: "center"
+            }}>
+              <div style={{ marginBottom: 13 }}>{f.icon}</div>
+              <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 6 }}>{f.title}</div>
+              <div style={{ color: "#334155", fontSize: 14, textAlign: "center" }}>{f.desc}</div>
+            </div>
+          )}
+        </div>
       </div>
+    </div>
+  );
+}
+
+function ActionCard({ title, desc, icon, color, onClick }) {
+  return (
+    <div
+      onClick={onClick}
+      style={{
+        background: color,
+        borderRadius: 16,
+        flex: 1,
+        minWidth: 230,
+        maxWidth: 255,
+        minHeight: 170,
+        margin: "0 8px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        cursor: "pointer",
+        boxShadow: "0 2px 12px #0001",
+        padding: 24,
+        transition: "transform 0.1s",
+      }}>
+      <div style={{ marginBottom: 13 }}>{icon}</div>
+      <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 7 }}>{title}</div>
+      <div style={{ color: "#334155", fontSize: 14, textAlign: "center" }}>{desc}</div>
     </div>
   );
 }

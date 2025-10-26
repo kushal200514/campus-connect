@@ -10,6 +10,7 @@ export const base44 = {
     },
     async logout() {
       localStorage.removeItem('user');
+      // FORCE a reload so context refreshes
       window.location.href = '/login';
     }
   }
