@@ -1,7 +1,7 @@
 // src/pages/PostItem.js
 import React, { useState } from "react";
 import { LostItem } from "@/entities/LostItem";
-import { User } from "@/entities/User";
+import { User } from "@/entities/user";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
